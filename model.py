@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn 
 from torchvision.models import vgg19
 
-class CRSNet(nn.Module): 
+class CSRNet(nn.Module): 
     def __init__(self):
         super().__init__()
         
