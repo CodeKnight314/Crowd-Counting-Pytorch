@@ -23,7 +23,7 @@ def train_batch(model, optimizer, data, criterion):
     loss.backward() 
     optimizer.step() 
 
-    pt_loss = nn.L1Loss(m_gt.sum(), gt.sum())
+    pt_loss = nn.functional.l1_loss(m_gt.sum(), gt.sum())
     return loss.item(), pt_loss.item()
 
 def validate_batch(model, data, criterion): 
@@ -34,10 +34,12 @@ def validate_batch(model, data, criterion):
 
     m_gt = model(img)
     loss = criterion(m_gt, gt)
-    pt_loss = nn.L1Loss(m_gt.sum(), gt.sum())
+    pt_loss = nn.functional.l1_loss(m_gt.sum(), gt.sum())
     return loss.item(), pt_loss.item()
 
 def CrowdCounting(root_dir : str, output_dir : str, total_epochs : int, model_pth : Union[str, None] = None): 
+    logger = LOGWRITER(output_directory=output_dir, total_epochs=total_epochs)
+    
     model = CSRNet().to(device)
     
     # Weights loading
@@ -58,8 +60,6 @@ def CrowdCounting(root_dir : str, output_dir : str, total_epochs : int, model_pt
     criterion = nn.MSELoss()
     optimizer = optim.Adam(model.parameters(), lr=1e-6)
 
-    logger = LOGWRITER(output_directory=output_dir, total_epochs=total_epochs)
-
     # Instantiates dataloaders
     trn_dl = get_dataset(root_dir=root_dir, mode="train_data", batch_size=1)
     val_dl = get_dataset(root_dir=root_dir, mode="test_data", batch_size=1)
@@ -71,7 +71,7 @@ def CrowdCounting(root_dir : str, output_dir : str, total_epochs : int, model_pt
         total_tr_loss = 0.0 
         total_tr_pts_loss = 0.0
         for data in tqdm(trn_dl, desc=f"[{epoch}/{total_epochs}] Training: "):
-            loss, pts_loss=train_batch(model, data, optimizer, criterion)
+            loss, pts_loss=train_batch(model, optimizer, data, criterion)
             total_tr_loss+=loss 
             total_tr_pts_loss+=pts_loss
 
