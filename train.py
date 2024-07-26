@@ -63,7 +63,7 @@ def CrowdCounting(root_dir : str, output_dir : str, total_epochs : int, model_pt
     # Instantiates dataloaders
     trn_dl = get_dataset(root_dir=root_dir, mode="train_data", batch_size=1)
     val_dl = get_dataset(root_dir=root_dir, mode="test_data", batch_size=1)
-
+    
     best_loss = float('inf')
     for epoch in range(total_epochs):
         
