@@ -6,7 +6,6 @@ class CSRNet(nn.Module):
     def __init__(self):
         super().__init__()
         
-        # load pretrained vgg19 model weights
         self.frontend = vgg19(weights = 'IMAGENET1K_V1').features[0:23]
         for params in self.frontend.parameters(): 
             params.requires_grad = False
@@ -30,7 +29,7 @@ class CSRNet(nn.Module):
 
         layers = []
         for v in self.backend_feat:
-            conv2d = nn.Conv2d(in_channels, v, kernel_size=3, padding=d_rate,dilation = d_rate)
+            conv2d = nn.Conv2d(in_channels, v, kernel_size=3, padding=d_rate, dilation = d_rate)
             if batch_norm:
                 layers += [conv2d, nn.BatchNorm2d(v), nn.ReLU(inplace=True)]
             else:
