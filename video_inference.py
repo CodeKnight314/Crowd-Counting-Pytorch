@@ -7,7 +7,9 @@ import os
 import numpy as np
 import argparse
 
-def main(input_video: str, model_pth: str, output_path: str):
+device = "cuda" if torch.cuda.is_available() else "cpu"
+
+def video_inference(input_video: str, model_pth: str, output_path: str):
     if not os.path.exists(input_video):
         raise FileNotFoundError(f"Input video file '{input_video}' does not exist.")
     
@@ -16,7 +18,7 @@ def main(input_video: str, model_pth: str, output_path: str):
         raise IOError(f"Error opening video file '{input_video}'.")
 
     # Loading model and weights
-    model = CSRNet().to("cuda")
+    model = CSRNet().to(device)
     model.load_state_dict(torch.load(model_pth), strict=False)
     model.eval()
 
@@ -35,7 +37,7 @@ def main(input_video: str, model_pth: str, output_path: str):
             break
         
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        frame_tensor = F.to_tensor(frame_rgb).unsqueeze(0).to("cuda")
+        frame_tensor = F.to_tensor(frame_rgb).unsqueeze(0).to(device)
 
         with torch.no_grad():
             prediction = model(frame_tensor)
@@ -60,8 +62,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser() 
     parser.add_argument("--input", required=True, type=str, help="input video directory address")
     parser.add_argument("--output", required=True, type=str, help="desired output video directory address")
-    parser.add_argument("--model_pth", required=True, type=str, help="model weights for crowd detection model")
+    parser.add_argument("--model_pth", required=True, type=str, help="model weights for CSRNet")
 
     args = parser.parse_args()
 
-    main(args.input, args.model_pth, args.output)
+    video_inference(args.input, args.model_pth, args.output)
