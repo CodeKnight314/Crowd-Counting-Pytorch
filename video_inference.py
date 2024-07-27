@@ -18,7 +18,7 @@ def video_inference(input_video: str, model_pth: str, output_path: str):
         raise IOError(f"Error opening video file '{input_video}'.")
 
     # Loading model and weights
-    model = CSRNet().to(device)
+    model = CSRNet(load_weights=True).to(device)
     model.load_state_dict(torch.load(model_pth), strict=False)
     model.eval()
 
