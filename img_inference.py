@@ -3,43 +3,47 @@ import os
 import torch
 from glob import glob
 from model import CSRNet
-import cv2
+import matplotlib.pyplot as plt
 from tqdm import tqdm
-import torchvision.transforms.functional as F
+from torchvision import transforms as T
 from PIL import Image
 import numpy as np
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 def img_inference(input_dir: str, output_dir: str, model_pth: str):
-    # Loading model and weights
-    model = CSRNet().to(device)
+    model = CSRNet(load_weights=True).to(device)
     model.load_state_dict(torch.load(model_pth), strict=False)
     model.eval()
 
     os.makedirs(output_dir, exist_ok=True)
 
+    transform = T.Compose([
+        T.ToTensor(),
+        T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    ])
+
     img_paths = glob(os.path.join(input_dir, "*"))
     for img_path in tqdm(img_paths, desc="[IMAGE PROCESSING]"):
         img = Image.open(img_path).convert("RGB")
-        img_tensor = F.to_tensor(img).unsqueeze(0).to(device)
+        img_tensor = transform(img).unsqueeze(0).to(device)
 
         with torch.no_grad():
-            prediction = model(img_tensor)
-            count = prediction.sum().item()
+            output = model(img_tensor)
+            count = int(output.detach().cpu().sum().numpy())
+            print("Predicted Count:", count)
 
-        heatmap = prediction.squeeze(0).cpu().numpy()
-        heatmap = cv2.resize(heatmap, (img.width, img.height))
-        heatmap = (heatmap - heatmap.min()) / (heatmap.max() - heatmap.min())  # Normalize
-        heatmap = (heatmap * 255).astype(np.uint8)
-        heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
-
-        img_cv2 = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
-        overlay = cv2.addWeighted(img_cv2, 0.5, heatmap, 0.5, 0)
-        cv2.putText(overlay, f'Count: {int(count)}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
+        temp = np.asarray(output.detach().cpu().reshape(output.detach().cpu().shape[2], output.detach().cpu().shape[3]))
+        
+        fig, ax = plt.subplots()
+        ax.imshow(img)
+        ax.imshow(temp, cmap='jet', alpha=0.5)
+        ax.axis('off')
+        ax.set_title(f'Count: {count}')
 
         output_path = os.path.join(output_dir, os.path.basename(img_path))
-        cv2.imwrite(output_path, overlay)
+        fig.savefig(output_path, bbox_inches='tight', pad_inches=0)
+        plt.close(fig)
 
     print("[INFO] Image processing complete.")
 
