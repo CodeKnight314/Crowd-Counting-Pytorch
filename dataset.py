@@ -16,7 +16,8 @@ class ShanghaiTech_CrowdCounting(Dataset):
         self.ground_truth_dir = sorted(glob(os.path.join(root_dir, mode, "ground-truth/*.mat")))
         self.ground_truth_h5 = sorted(glob(os.path.join(root_dir, mode, "ground-truth-h5/*.h5")))
 
-        self.transform = T.Compose([T.ToTensor()])
+        self.transform = T.Compose([T.ToTensor(),
+                                    T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])])
 
     def __len__(self):
         return len(self.image_dir)
