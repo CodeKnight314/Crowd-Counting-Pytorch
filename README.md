@@ -27,11 +27,15 @@ python video_inference.py --input path/to/video.mp4 --output path/to/output.mp4 
 The pre-trained model weights for CSRNet can be downloaded directly from this repository. Make sure to specify the correct path when running inference.
 
 # Visual Results
-![Shanghai Tech predictions](files/images/IMG_44.jpg)
-*Figure 1: IMG 44 from Shanghai Tech Test dataset Part A
-
-![Shanghai Tech predictions](files/images/IMG_59.jpg)
-*Figure 2: IMG 59 from Shanghai Tech Test dataset Part A
-
-![Shanghai Tech predictions](files/images/IMG_98.jpg)
-*Figure 3: IMG 98 from Shanghai Tech Test dataset Part A
+<div align="center">
+  <img src="files/images/IMG_44.jpg" alt="Shanghai Tech predictions" style="width:50%;">
+  <p><em>Figure 1: IMG 44 from Shanghai Tech Test dataset Part A</em></p>
+</div>
+<div align="center">
+  <img src="files/images/IMG_59.jpg" alt="Shanghai Tech predictions" style="width:50%;">
+  <p><em>Figure 2: IMG 59 from Shanghai Tech Test dataset Part A</em></p>
+</div>
+<div align="center">
+  <img src="files/images/IMG_98.jpg" alt="Shanghai Tech predictions" style="width:50%;">
+  <p><em>Figure 3: IMG 98 from Shanghai Tech Test dataset Part A</em></p>
+</div>
