@@ -1,15 +1,14 @@
 # Crowd-Counting-Pytorch
 
 ## Overview
-Overview
-This repository is built for educational purposes on CSRNet in crowd counting, a frequent practice by others over the past half-decade. Crowd counting is a crucial task in computer vision, aimed at estimating the number of individuals in an image or video. It has a wide range of applications, from public safety and event management to retail analytics and urban planning. 
+This repository is built for educational purposes on CSRNet in crowd counting, a frequent practice by others over the past half-decade. Crowd counting is a crucial task in computer vision, aimed at estimating the number of individuals in an image or video. It leverages the power of convolutional neural networks with dilated convolutions to capture contextual information effectively. Despite its popularity, CSRNet has limitations that affect its reliability in accurately predicting crowd sizes. Alternative methods include predicting bounding boxes or positions of people in large crowds, which often results in robust performance albeit with additional data annotations.
+
+This repository attempt's attempt at novelty includes the Inception module, originally from googlenet, since the module extracts and aggregates features with different kernel sizes, resulting in combined multi-scale features. The additional module between the backend and final convolution did not yield significant performance change, though the model has not been extensively tested.
 
 This repository includes:
-- CSRNet Model Implementation: A PyTorch implementation of the CSRNet model.
+- CSRNet Model Implementation: A PyTorch implementation of the modified CSRNet model.
 - Image Inference Script: A script to perform inference on a folder of images, generating crowd density heatmaps and overlaying them on the original images.
 - Video Inference Script: A script to perform inference on a video file, generating crowd density heatmaps for each frame and overlaying them on the original frames.
-
-These scripts provide a simple and effective way to apply CSRNet to real-world data, enabling users to quickly visualize and analyze crowd density in their images and videos.
 
 ## Usage
 - For image inference, run the following code snippet.
@@ -25,4 +24,14 @@ python video_inference.py --input path/to/video.mp4 --output path/to/output.mp4 
 ```
 
 # Model Weights
-The pre-trained model weights for CSRNet can be downloaded directly from this repository. Make sure to place the downloaded weights file in the appropriate directory or specify the correct path when running inference.
+The pre-trained model weights for CSRNet can be downloaded directly from this repository. Make sure to specify the correct path when running inference.
+
+# Visual Results
+![Shanghai Tech predictions](files/images/IMG_44.jpg)
+*Figure 1: IMG 44 from Shanghai Tech Test dataset Part A
+
+![Shanghai Tech predictions](files/images/IMG_59.jpg)
+*Figure 2: IMG 59 from Shanghai Tech Test dataset Part A
+
+![Shanghai Tech predictions](files/images/IMG_98.jpg)
+*Figure 3: IMG 98 from Shanghai Tech Test dataset Part A
