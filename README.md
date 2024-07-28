@@ -3,7 +3,7 @@
 ## Overview
 This repository is built for educational purposes on CSRNet in crowd counting, a frequent practice by others over the past half-decade. Crowd counting is a crucial task in computer vision, aimed at estimating the number of individuals in an image or video. It leverages the power of convolutional neural networks with dilated convolutions to capture contextual information effectively. Despite its popularity, CSRNet has limitations that affect its reliability in accurately predicting crowd sizes. Alternative methods include predicting bounding boxes or positions of people in large crowds, which often results in robust performance albeit with additional data annotations.
 
-This repository attempt's attempt at novelty includes the Inception module, originally from googlenet, since the module extracts and aggregates features with different kernel sizes, resulting in combined multi-scale features. The additional module between the backend and final convolution did not yield significant performance change, though the model has not been extensively tested.
+This repository attempt's at novelty includes the Inception module, originally from googlenet, since the module extracts and aggregates features with different kernel sizes, resulting in combined multi-scale features. The additional module between the backend and final convolution did not yield significant performance change, though the model has not been extensively tested.
 
 This repository includes:
 - CSRNet Model Implementation: A PyTorch implementation of the modified CSRNet model.
