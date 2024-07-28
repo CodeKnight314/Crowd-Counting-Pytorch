@@ -43,16 +43,9 @@ def video_inference(input_video: str, model_pth: str, output_path: str):
             prediction = model(frame_tensor)
             count = prediction.sum().item()
 
-        heatmap = prediction.squeeze(0).cpu().numpy()
-        heatmap = cv2.resize(heatmap, (width, height))
-        heatmap = (heatmap - heatmap.min()) / (heatmap.max() - heatmap.min())  # Normalize
-        heatmap = (heatmap * 255).astype(np.uint8)
-        heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
+        cv2.putText(frame, f'Count: {int(count)}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
 
-        overlay = cv2.addWeighted(frame, 0.5, heatmap, 0.5, 0)
-        cv2.putText(overlay, f'Count: {int(count)}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
-
-        out.write(overlay)
+        out.write(frame)
 
     cap.release()
     out.release()
