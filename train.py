@@ -65,12 +65,12 @@ def CrowdCounting(root_dir : str, output_dir : str, total_epochs : int, model_pt
     val_dl = get_dataset(root_dir=root_dir, mode="test_data", batch_size=1)
 
     best_loss = float('inf')
-    for epoch in range(1, total_epochs + 1):
+    for epoch in range(total_epochs):
         
         # Training Loop
         total_tr_loss = 0.0 
         total_tr_pts_loss = 0.0
-        for data in tqdm(trn_dl, desc=f"[{epoch}/{total_epochs}] Training: "):
+        for data in tqdm(trn_dl, desc=f"[{epoch+1}/{total_epochs}] Training: "):
             loss, pts_loss=train_batch(model, optimizer, data, criterion)
             total_tr_loss+=loss 
             total_tr_pts_loss+=pts_loss
@@ -79,7 +79,7 @@ def CrowdCounting(root_dir : str, output_dir : str, total_epochs : int, model_pt
         total_val_loss = 0.0 
         total_val_pts_loss = 0.0
         with torch.no_grad():
-            for data in tqdm(val_dl, desc=f"[{epoch}/{total_epochs}] Validating: "):
+            for data in tqdm(val_dl, desc=f"[{epoch+1}/{total_epochs}] Validating: "):
                 loss, pts_loss = validate_batch(model, data, criterion)
                 total_val_loss+=loss 
                 total_val_pts_loss+=pts_loss
